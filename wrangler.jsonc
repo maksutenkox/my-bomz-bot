@@ -1,0 +1,19 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "my-bomz-bot",
+  "main": "src/index.js",
+  "compatibility_date": "2026-09-22",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*", "/telegram/*"]
+  },
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "my-bomz-bot",
+    "database_id": "7fbe439d-c8e1-4443-a5a1-4efe8cccad40",
+    "migrations_dir": "migrations"
+  }],
+  "observability": { "enabled": true, "head_sampling_rate": 1 }
+}
