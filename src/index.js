@@ -1,4 +1,4 @@
-import { ACTIONS, newGame, play, available } from "./game.js";
+import { actionsFor, newGame, normalizeState, play } from "./game.js";
 
 const json = (body, status = 200) => new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" } });
 const encoder = new TextEncoder();
@@ -30,7 +30,7 @@ async function getPlayer(env, user) {
     await env.DB.prepare("INSERT OR IGNORE INTO players (telegram_id, name, state_json) VALUES (?, ?, ?)").bind(user.id, state.name, JSON.stringify(state)).run();
     row = await env.DB.prepare("SELECT state_json, version FROM players WHERE telegram_id = ?").bind(user.id).first();
   }
-  return { state: JSON.parse(row.state_json), version: row.version };
+  return { state: normalizeState(JSON.parse(row.state_json)), version: row.version };
 }
 
 async function sendTelegram(token, chatId, url) {
@@ -45,7 +45,7 @@ export default {
       if (url.pathname === "/api/health") return json({ ok: true, service: "my-bomz-bot" });
       if (url.pathname === "/api/preview" && request.method === "GET") {
         const state = newGame();
-        return json({ state, actions: ACTIONS.map((a) => ({ ...a, unavailable: available(a, state) })) });
+        return json({ state, actions: actionsFor(state) });
       }
       if (url.pathname === "/telegram/webhook" && request.method === "POST") {
         const supplied = encoder.encode(request.headers.get("X-Telegram-Bot-Api-Secret-Token") ?? "");
@@ -58,7 +58,7 @@ export default {
       if (url.pathname.startsWith("/api/")) {
         const user = await telegramUser(request, env.TELEGRAM_BOT_TOKEN);
         const player = await getPlayer(env, user);
-        if (url.pathname === "/api/state" && request.method === "GET") return json({ state: player.state, actions: ACTIONS.map((a) => ({ ...a, unavailable: available(a, player.state) })) });
+        if (url.pathname === "/api/state" && request.method === "GET") return json({ state: player.state, actions: actionsFor(player.state) });
         if (url.pathname === "/api/action" && request.method === "POST") {
           const body = await request.json();
           if (typeof body?.id !== "string") return json({ error: "INVALID_ACTION" }, 400);
@@ -66,12 +66,12 @@ export default {
           try { next = play(player.state, body.id); } catch (error) { return json({ error: error.message }, 400); }
           const result = await env.DB.prepare("UPDATE players SET state_json = ?, version = version + 1, updated_at = unixepoch() WHERE telegram_id = ? AND version = ?").bind(JSON.stringify(next), user.id, player.version).run();
           if (result.meta.changes !== 1) return json({ error: "STATE_CHANGED" }, 409);
-          return json({ state: next, actions: ACTIONS.map((a) => ({ ...a, unavailable: available(a, next) })) });
+          return json({ state: next, actions: actionsFor(next) });
         }
         if (url.pathname === "/api/restart" && request.method === "POST") {
           const next = newGame(user.first_name ?? "Герой");
           await env.DB.prepare("UPDATE players SET state_json = ?, version = version + 1 WHERE telegram_id = ?").bind(JSON.stringify(next), user.id).run();
-          return json({ state: next, actions: ACTIONS.map((a) => ({ ...a, unavailable: available(a, next) })) });
+          return json({ state: next, actions: actionsFor(next) });
         }
         return json({ error: "NOT_FOUND" }, 404);
       }
