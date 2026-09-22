@@ -23,6 +23,47 @@ let busy = false;
 const preview = !initData;
 document.body.classList.toggle("preview", preview);
 
+const THEME_KEY = "my-bomz-theme";
+const themeMedia = window.matchMedia("(prefers-color-scheme: dark)");
+
+function preferredTheme() {
+  const saved = localStorage.getItem(THEME_KEY);
+  if (saved === "dark" || saved === "light") return saved;
+  if (tg?.colorScheme === "dark" || tg?.colorScheme === "light") return tg.colorScheme;
+  return themeMedia.matches ? "dark" : "light";
+}
+
+function applyTheme(theme, persist = false) {
+  const next = theme === "dark" ? "dark" : "light";
+  document.documentElement.dataset.theme = next;
+  const dark = next === "dark";
+  const button = $("themeButton");
+  const icon = $("themeIcon");
+  const label = dark ? "Включить светлую тему" : "Включить тёмную тему";
+  if (button) {
+    button.setAttribute("aria-label", label);
+    button.title = label;
+    button.setAttribute("aria-pressed", String(dark));
+  }
+  if (icon) icon.textContent = dark ? "☀" : "☾";
+  $("themeColor")?.setAttribute("content", dark ? "#111817" : "#f4f1e9");
+  try {
+    tg?.setHeaderColor?.(dark ? "#111817" : "#f4f1e9");
+    tg?.setBackgroundColor?.(dark ? "#111817" : "#f4f1e9");
+    tg?.setBottomBarColor?.(dark ? "#151f1d" : "#fffaf4");
+  } catch {}
+  if (persist) localStorage.setItem(THEME_KEY, next);
+}
+
+applyTheme(preferredTheme());
+
+themeMedia.addEventListener?.("change", () => {
+  if (!localStorage.getItem(THEME_KEY)) applyTheme(preferredTheme());
+});
+tg?.onEvent?.("themeChanged", () => {
+  if (!localStorage.getItem(THEME_KEY)) applyTheme(preferredTheme());
+});
+
 async function api(path, options = {}) {
   const response = await fetch(path, { ...options, headers: { "Content-Type": "application/json", "X-Telegram-Init-Data": initData, ...options.headers } });
   const data = await response.json();
@@ -94,6 +135,11 @@ async function handleAction(event) {
 }
 $("actions").addEventListener("click", handleAction);
 $("homeActions").addEventListener("click", handleAction);
+$("themeButton").onclick = () => {
+  const currentTheme = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+  applyTheme(currentTheme === "dark" ? "light" : "dark", true);
+  tg?.HapticFeedback?.selectionChanged?.();
+};
 $("menuButton").onclick = () => $("info").showModal();
 $("closeInfo").onclick = () => $("info").close();
 $("restartButton").onclick = async () => {
