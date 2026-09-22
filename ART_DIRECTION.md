@@ -10,4 +10,6 @@
 
 Фоны: «Portrait mobile game environment, hand-painted gouache and pencil narrative art, eye-level perspective, center kept clear for a full-body character overlay, ground in lower quarter, muted teal/olive/terracotta/cream palette, no people, UI, text or logos.» Отдельные сюжеты: тихий городской угол и скромная съёмная квартира.
 
+Нижняя навигация: «Use case: stylized-concept. Asset type: tiny bottom-navigation icon for portrait mobile game. Make one centered, bold, instantly recognizable silhouette with only a few painted details, designed to remain clear at 28 pixels. Hand-painted gouache and pencil texture, muted olive, warm ochre, terracotta, cream palette, soft light. Genuine transparent alpha background, generous clear padding. No text, letters, logos, square tile, UI, or watermark.» Отдельные сюжеты: дверь с тёплым окном (Главная), миска с листом (Забота), рабочие перчатки на монете (Заработок), сумка из магазина с одеждой (Магазин), указатель расходящихся дорог (Путь).
+
 Финальные оптимизированные файлы находятся в `public/assets/`. Локальный `art-sources.local.json` содержит пути к исходным PNG и не включается в Git; `scripts/prepare_art.py` преобразует выбранные PNG в WebP без изменения композиции.

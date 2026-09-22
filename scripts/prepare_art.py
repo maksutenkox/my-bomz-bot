@@ -1,5 +1,6 @@
 """Convert selected generated illustrations to mobile-sized WebP game assets."""
 import json
+import sys
 from pathlib import Path
 from PIL import Image
 
@@ -8,7 +9,10 @@ sources = json.loads((root / "art-sources.local.json").read_text(encoding="utf-8
 output = root / "public" / "assets"
 output.mkdir(parents=True, exist_ok=True)
 
+selected = set(sys.argv[1:]) or set(sources)
 for name, source in sources.items():
+    if name not in selected:
+        continue
     with Image.open(source) as original:
         image = original.convert("RGBA")
         maximum = 1080 if name.endswith("-bg") else 800 if name.startswith("hero-") else 384

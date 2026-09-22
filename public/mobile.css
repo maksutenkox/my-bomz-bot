@@ -1,6 +1,6 @@
 :root{color:#20332f;background:#f4f1e9}
 body{background:#f4f1e9;color:#20332f}
-.shell{max-width:460px;padding:14px 14px calc(32px + env(safe-area-inset-bottom))}
+.shell{max-width:460px;padding:14px 14px calc(100px + env(safe-area-inset-bottom))}
 .topbar{margin:1px 2px 13px}
 .eyebrow{color:#a77449;font-size:9px;letter-spacing:.19em}
 .topbar h1{font-size:23px;letter-spacing:-.065em}
@@ -26,6 +26,13 @@ body{background:#f4f1e9;color:#20332f}
 .event-card{background:#e7ecdf;color:#27423a;border:1px solid #d8e1d1;border-radius:13px;min-height:54px;padding:10px 12px}
 .event-card p{font-size:11px}
 .event-icon{color:#7d9a73;font-size:19px}
+.home-quick{margin-top:22px}
+.section-heading{margin:18px 2px 11px}
+.section-heading h2{font-size:21px;letter-spacing:-.045em;margin:4px 0 0}
+.section-heading p{font-size:11px;color:#74847a;margin:5px 0 0}
+.action-panel{padding-top:2px}
+.action-panel .section-heading{margin-top:20px}
+.section-event{margin:16px 0 2px}
 .tabs{gap:7px;padding:16px 0 11px;margin-right:-14px;padding-right:14px}
 .tab{display:flex;align-items:center;gap:6px;background:#fffaf2;color:#5a6d61;border-color:#e4dfd2;border-radius:13px;padding:7px 11px;font-size:10px;box-shadow:0 2px 9px #43564b0b}
 .tab img{width:23px;height:23px;object-fit:contain}
@@ -44,4 +51,10 @@ footer{color:#8f9a8d;font-size:9px;padding:21px 3px}
 .reset{color:#a77449}
 dialog{background:#fffaf2;color:#243c35;border-color:#dadccd}
 .close{background:#eaeadd;color:#28483f;border:0}
+.bottom-nav{position:fixed;z-index:20;bottom:0;left:50%;transform:translateX(-50%);display:grid;grid-template-columns:repeat(5,minmax(0,1fr));width:min(100%,460px);padding:7px 9px calc(7px + env(safe-area-inset-bottom));background:#fffaf4f2;border-top:1px solid #dedfd5;box-shadow:0 -5px 24px #3444381e;backdrop-filter:blur(16px)}
+.bottom-nav-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:56px;padding:3px 1px;border:0;border-radius:12px;background:transparent;color:#65756b;font:800 9px Manrope,system-ui,sans-serif;cursor:pointer}
+.bottom-nav-item img{width:36px;height:36px;object-fit:contain;filter:saturate(.68);transition:transform .2s,filter .2s}
+.bottom-nav-item.active{background:#e7ecdf;color:#25473e}
+.bottom-nav-item.active img{filter:saturate(1.1);transform:translateY(-1px) scale(1.08)}
+[hidden]{display:none!important}
 @media(max-width:360px){.shell{padding-left:11px;padding-right:11px}.scene{height:320px}.hero-art{height:92%}.meta{gap:6px}.tab{padding:7px 9px}.action-icon{width:48px;height:48px;flex-basis:48px}}

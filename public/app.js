@@ -4,12 +4,20 @@ tg?.expand();
 const initData = tg?.initData ?? "";
 const $ = (id) => document.getElementById(id);
 const tabArt = { Еда: "canteen", Здоровье: "clinic", Радость: "park", Работа: "cars", Развитие: "study", Магазин: "sneakers", Жильё: "apartment", Финансы: "save", Политика: "campaign", "Теневая сторона": "street_trade" };
+const sections = {
+  home: { label: "Главная", icon: "nav-home" },
+  care: { label: "Забота", icon: "nav-care", eyebrow: "ПОВСЕДНЕВНАЯ ЖИЗНЬ", description: "Еда, здоровье и настроение", tabs: ["Еда", "Здоровье", "Радость"] },
+  work: { label: "Заработок", icon: "nav-work", eyebrow: "ШАГ ЗА ШАГОМ", description: "Подработка, документы и учёба", tabs: ["Работа", "Развитие"] },
+  shop: { label: "Магазин", icon: "nav-shop", eyebrow: "НОВЫЕ ВОЗМОЖНОСТИ", description: "Вещи, жильё и вложения", tabs: ["Магазин", "Жильё", "Финансы"] },
+  path: { label: "Путь", icon: "nav-path", eyebrow: "КЕМ ТЫ СТАНЕШЬ", description: "Разные дороги — разные последствия", tabs: ["Политика", "Теневая сторона"] }
+};
 const colors = { food: "#eeb670", health: "#82bd98", joy: "#e9a5a7", energy: "#8eb5d5" };
 const names = { food: "Сытость", health: "Здоровье", joy: "Радость", energy: "Энергия" };
 const effectNames = { food: "еда", health: "здоровье", joy: "радость", energy: "энергия", money: "₽", reputation: "репутация", heat: "внимание", study: "учёба", investments: "инвестиции" };
 const effects = (action) => Object.entries(action.effects).filter(([key]) => key !== "workShifts").map(([key, value]) => key === "time" ? `${value} ч` : `${value > 0 ? "+" : ""}${value} ${effectNames[key] ?? key}`).join(" · ");
 let current = null;
-let activeTab = "Еда";
+let activeSection = "home";
+const activeTabs = { care: "Еда", work: "Работа", shop: "Магазин", path: "Политика" };
 let busy = false;
 const preview = !initData;
 document.body.classList.toggle("preview", preview);
@@ -38,16 +46,31 @@ function render(data) {
   $("pathName").textContent = s.owned.includes("council") ? "Голос района" : s.owned.includes("crew") ? "Теневой хозяин" : s.owned.includes("apartment") ? "Новая жизнь" : "Начало истории";
   $("reputation").textContent = `Репутация ${s.reputation}`;
   $("event").textContent = s.log[0];
-  const tabs = [...new Set(data.actions.map((a) => a.tab))];
-  $("tabs").innerHTML = tabs.map((tab) => `<button class="tab ${activeTab === tab ? "active" : ""}" data-tab="${tab}"><img src="/assets/${tabArt[tab]}.webp" alt="" />${tab}</button>`).join("");
-  $("actions").innerHTML = data.actions.filter((a) => a.tab === activeTab).map((a) => `<button class="action" data-action="${a.id}" ${a.unavailable || busy || preview ? "disabled" : ""}><span class="action-icon"><img src="/assets/${a.id}.webp" alt="" loading="lazy" /></span><span class="action-copy"><span class="action-title">${a.title}</span><span class="action-detail">${a.unavailable ?? a.detail}</span><span class="action-effects">${effects(a)}</span></span><span class="action-arrow">→</span></button>`).join("");
+  $("sectionEvent").textContent = s.log[0];
+  $("bottomNav").innerHTML = Object.entries(sections).map(([key, section]) => `<button class="bottom-nav-item ${activeSection === key ? "active" : ""}" data-section="${key}" aria-current="${activeSection === key ? "page" : "false"}"><img src="/assets/${section.icon}.webp" alt="" /><span>${section.label}</span></button>`).join("");
+  $("homePanel").hidden = activeSection !== "home";
+  $("actionPanel").hidden = activeSection === "home";
+  const actionCard = (a) => `<button class="action" data-action="${a.id}" ${a.unavailable || busy || preview ? "disabled" : ""}><span class="action-icon"><img src="/assets/${a.id}.webp" alt="" loading="lazy" /></span><span class="action-copy"><span class="action-title">${a.title}</span><span class="action-detail">${a.unavailable ?? a.detail}</span><span class="action-effects">${effects(a)}</span></span><span class="action-arrow">→</span></button>`;
+  $("homeActions").innerHTML = ["canteen", "bottles", "sleep"].map((id) => data.actions.find((a) => a.id === id)).filter(Boolean).map(actionCard).join("");
+  if (activeSection !== "home") {
+    const section = sections[activeSection];
+    $("sectionEyebrow").textContent = section.eyebrow;
+    $("sectionTitle").textContent = section.label;
+    $("sectionDescription").textContent = section.description;
+    $("tabs").innerHTML = section.tabs.map((tab) => `<button class="tab ${activeTabs[activeSection] === tab ? "active" : ""}" data-tab="${tab}" aria-current="${activeTabs[activeSection] === tab ? "page" : "false"}"><img src="/assets/${tabArt[tab]}.webp" alt="" />${tab}</button>`).join("");
+    $("actions").innerHTML = data.actions.filter((a) => a.tab === activeTabs[activeSection]).map(actionCard).join("");
+  }
 }
 
+$("bottomNav").addEventListener("click", (event) => {
+  const section = event.target.closest("[data-section]")?.dataset.section;
+  if (section && sections[section] && current) { activeSection = section; render(current); window.scrollTo(0, 0); }
+});
 $("tabs").addEventListener("click", (event) => {
   const tab = event.target.closest("[data-tab]")?.dataset.tab;
-  if (tab) { activeTab = tab; render(current); }
+  if (tab && sections[activeSection]?.tabs?.includes(tab)) { activeTabs[activeSection] = tab; render(current); }
 });
-$("actions").addEventListener("click", async (event) => {
+async function handleAction(event) {
   const id = event.target.closest("[data-action]")?.dataset.action;
   if (!id || busy) return;
   busy = true;
@@ -55,14 +78,16 @@ $("actions").addEventListener("click", async (event) => {
   let failure = null;
   try { current = await api("/api/action", { method: "POST", body: JSON.stringify({ id }) }); tg?.HapticFeedback?.impactOccurred("light"); }
   catch (error) { failure = error.message; }
-  finally { busy = false; render(current); if (failure) $("event").textContent = failure; }
-});
+  finally { busy = false; render(current); if (failure) { $("event").textContent = failure; $("sectionEvent").textContent = failure; } }
+}
+$("actions").addEventListener("click", handleAction);
+$("homeActions").addEventListener("click", handleAction);
 $("menuButton").onclick = () => $("info").showModal();
 $("closeInfo").onclick = () => $("info").close();
 $("restartButton").onclick = async () => {
   if (preview) { window.location.href = "https://t.me/Mybomzbot"; return; }
   if (!confirm("Начать новую историю? Текущий прогресс исчезнет.")) return;
-  try { activeTab = "Еда"; render(await api("/api/restart", { method: "POST" })); }
+  try { activeSection = "home"; activeTabs.care = "Еда"; render(await api("/api/restart", { method: "POST" })); }
   catch (error) { $("event").textContent = error.message; }
 };
 

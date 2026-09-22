@@ -18,6 +18,7 @@
       <div class="meta"><span id="day">День 1</span><span id="age">25 лет</span><span id="time">08:00</span><strong id="money">0 ₽</strong></div>
       <div class="bars" id="bars"></div>
     </section>
+    <section class="home-panel" id="homePanel">
     <section class="scene" id="scene" aria-label="Герой и его окружение">
       <img class="scene-bg" id="sceneBg" src="/assets/street-bg.webp" alt="" />
       <div class="scene-vignette"></div>
@@ -27,10 +28,17 @@
     </section>
     <section class="headline"><div><span class="eyebrow">ТВОЙ ПУТЬ</span><h2 id="pathName">Начало истории</h2></div><div class="badge" id="reputation">Репутация 0</div></section>
     <section class="event-card"><span class="event-icon">✦</span><p id="event">Выбери действие, чтобы начать историю.</p></section>
-    <nav class="tabs" id="tabs" aria-label="Разделы игры"></nav>
+    <section class="home-quick"><div class="section-heading"><span class="eyebrow">С ЧЕГО НАЧАТЬ</span><h2>Быстрые действия</h2></div><div class="actions" id="homeActions"></div></section>
+    </section>
+    <section class="action-panel" id="actionPanel" hidden>
+    <div class="section-heading"><span class="eyebrow" id="sectionEyebrow"></span><h2 id="sectionTitle"></h2><p id="sectionDescription"></p></div>
+    <section class="event-card section-event"><span class="event-icon">✦</span><p id="sectionEvent"></p></section>
+    <nav class="tabs" id="tabs" aria-label="Подразделы"></nav>
     <section class="actions" id="actions"></section>
+    </section>
     <footer><button id="restartButton" class="reset">Начать заново</button><span>Каждое решение меняет твою историю</span></footer>
   </main>
+  <nav class="bottom-nav" id="bottomNav" aria-label="Главные разделы игры"></nav>
   <dialog id="info"><button id="closeInfo" class="close" aria-label="Закрыть">×</button><h2>Как играть</h2><p>Выбирай действия, следи за сытостью, здоровьем, радостью и энергией. Документы, учёба, жильё и связи открывают новые занятия.</p><p>Разные решения ведут к работе, инвестициям, политике или теневой карьере. Действия тратят время, а каждый новый день приносит расходы.</p></dialog>
 </body>
 </html>
