@@ -3,7 +3,7 @@ tg?.ready();
 tg?.expand();
 const initData = tg?.initData ?? "";
 const $ = (id) => document.getElementById(id);
-const icons = { Еда: "🍲", Здоровье: "✚", Радость: "✦", Работа: "⚒", Развитие: "📚", Магазин: "🛍", Жильё: "⌂", Финансы: "◈", Политика: "★", "Теневая сторона": "◆" };
+const tabArt = { Еда: "canteen", Здоровье: "clinic", Радость: "park", Работа: "cars", Развитие: "study", Магазин: "sneakers", Жильё: "apartment", Финансы: "save", Политика: "campaign", "Теневая сторона": "street_trade" };
 const colors = { food: "#eeb670", health: "#82bd98", joy: "#e9a5a7", energy: "#8eb5d5" };
 const names = { food: "Сытость", health: "Здоровье", joy: "Радость", energy: "Энергия" };
 const effectNames = { food: "еда", health: "здоровье", joy: "радость", energy: "энергия", money: "₽", reputation: "репутация", heat: "внимание", study: "учёба", investments: "инвестиции" };
@@ -11,6 +11,8 @@ const effects = (action) => Object.entries(action.effects).filter(([key]) => key
 let current = null;
 let activeTab = "Еда";
 let busy = false;
+const preview = !initData;
+document.body.classList.toggle("preview", preview);
 
 async function api(path, options = {}) {
   const response = await fetch(path, { ...options, headers: { "Content-Type": "application/json", "X-Telegram-Init-Data": initData, ...options.headers } });
@@ -29,15 +31,16 @@ function render(data) {
   $("bars").innerHTML = Object.keys(names).map((key) => `<div><div class="bar-line"><span>${names[key]}</span><span>${s[key]}%</span></div><div class="track"><div class="fill" style="width:${s[key]}%;background:${colors[key]}"></div></div></div>`).join("");
   $("scene").classList.toggle("has-apartment", s.owned.includes("apartment"));
   $("scene").classList.toggle("has-bike", s.owned.includes("bike"));
-  $("avatar").classList.toggle("has-sneakers", s.owned.includes("sneakers"));
-  $("avatar").classList.toggle("has-jacket", s.owned.includes("jacket"));
+  $("sceneBg").src = s.owned.includes("apartment") ? "/assets/apartment-bg.webp" : "/assets/street-bg.webp";
+  const outfit = s.owned.includes("sneakers") ? (s.owned.includes("jacket") ? "both" : "sneakers") : (s.owned.includes("jacket") ? "jacket" : "base");
+  $("avatar").src = `/assets/hero-${outfit}.webp`;
   $("sceneLabel").textContent = s.owned.includes("apartment") ? "Своя квартира • новый этап" : "Улица • новый шанс";
   $("pathName").textContent = s.owned.includes("council") ? "Голос района" : s.owned.includes("crew") ? "Теневой хозяин" : s.owned.includes("apartment") ? "Новая жизнь" : "Начало истории";
   $("reputation").textContent = `Репутация ${s.reputation}`;
   $("event").textContent = s.log[0];
   const tabs = [...new Set(data.actions.map((a) => a.tab))];
-  $("tabs").innerHTML = tabs.map((tab) => `<button class="tab ${activeTab === tab ? "active" : ""}" data-tab="${tab}">${icons[tab]} ${tab}</button>`).join("");
-  $("actions").innerHTML = data.actions.filter((a) => a.tab === activeTab).map((a) => `<button class="action" data-action="${a.id}" ${a.unavailable || busy ? "disabled" : ""}><span class="action-icon">${icons[a.tab]}</span><span class="action-copy"><span class="action-title">${a.title}</span><span class="action-detail">${a.unavailable ?? a.detail}</span><span class="action-effects">${effects(a)}</span></span><span class="action-arrow">→</span></button>`).join("");
+  $("tabs").innerHTML = tabs.map((tab) => `<button class="tab ${activeTab === tab ? "active" : ""}" data-tab="${tab}"><img src="/assets/${tabArt[tab]}.webp" alt="" />${tab}</button>`).join("");
+  $("actions").innerHTML = data.actions.filter((a) => a.tab === activeTab).map((a) => `<button class="action" data-action="${a.id}" ${a.unavailable || busy || preview ? "disabled" : ""}><span class="action-icon"><img src="/assets/${a.id}.webp" alt="" loading="lazy" /></span><span class="action-copy"><span class="action-title">${a.title}</span><span class="action-detail">${a.unavailable ?? a.detail}</span><span class="action-effects">${effects(a)}</span></span><span class="action-arrow">→</span></button>`).join("");
 }
 
 $("tabs").addEventListener("click", (event) => {
@@ -57,14 +60,11 @@ $("actions").addEventListener("click", async (event) => {
 $("menuButton").onclick = () => $("info").showModal();
 $("closeInfo").onclick = () => $("info").close();
 $("restartButton").onclick = async () => {
+  if (preview) { window.location.href = "https://t.me/Mybomzbot"; return; }
   if (!confirm("Начать новую историю? Текущий прогресс исчезнет.")) return;
   try { activeTab = "Еда"; render(await api("/api/restart", { method: "POST" })); }
   catch (error) { $("event").textContent = error.message; }
 };
 
-if (!initData) {
-  $("event").textContent = "Открой игру через кнопку в Telegram-боте.";
-  $("actions").innerHTML = "<p>Игровой прогресс привязан к Telegram.</p>";
-} else {
-  api("/api/state").then(render).catch((error) => { $("event").textContent = error.message; });
-}
+if (preview) $("restartButton").textContent = "Открыть бот";
+api(preview ? "/api/preview" : "/api/state").then((data) => { render(data); if (preview) $("event").textContent = "Это просмотр. Играй через @Mybomzbot в Telegram."; }).catch((error) => { $("event").textContent = error.message; });

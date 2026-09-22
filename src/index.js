@@ -43,6 +43,10 @@ export default {
     const url = new URL(request.url);
     try {
       if (url.pathname === "/api/health") return json({ ok: true, service: "my-bomz-bot" });
+      if (url.pathname === "/api/preview" && request.method === "GET") {
+        const state = newGame();
+        return json({ state, actions: ACTIONS.map((a) => ({ ...a, unavailable: available(a, state) })) });
+      }
       if (url.pathname === "/telegram/webhook" && request.method === "POST") {
         const supplied = encoder.encode(request.headers.get("X-Telegram-Bot-Api-Secret-Token") ?? "");
         const expected = encoder.encode(env.TELEGRAM_WEBHOOK_SECRET);

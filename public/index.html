@@ -7,6 +7,7 @@
   <title>My bomz bot</title>
   <link rel="stylesheet" href="/styles.css" />
   <link rel="stylesheet" href="/extras.css" />
+  <link rel="stylesheet" href="/mobile.css" />
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script type="module" src="/app.js"></script>
 </head>
@@ -18,16 +19,11 @@
       <div class="bars" id="bars"></div>
     </section>
     <section class="scene" id="scene" aria-label="Герой и его окружение">
-      <div class="scene-glow"></div><div class="skyline skyline-back"></div><div class="skyline skyline-front"></div>
-      <div class="window"><div class="window-light"></div></div><div class="plant"></div>
+      <img class="scene-bg" id="sceneBg" src="/assets/street-bg.webp" alt="" />
+      <div class="scene-vignette"></div>
       <div class="scene-label" id="sceneLabel">Улица • новый шанс</div>
-      <div class="bike" id="bike"><div class="wheel left"></div><div class="wheel right"></div><div class="bike-frame"></div><div class="bike-bar"></div></div>
-      <div class="avatar" id="avatar">
-        <div class="hair"></div><div class="face"><div class="eyes">• &nbsp; •</div><div class="nose"></div><div class="mouth"></div></div>
-        <div class="neck"></div><div class="body"><div class="shirt"></div><div class="jacket"></div></div>
-        <div class="arm arm-left"></div><div class="arm arm-right"></div><div class="leg leg-left"></div><div class="leg leg-right"></div><div class="shoe shoe-left"></div><div class="shoe shoe-right"></div>
-      </div>
-      <div class="ground"></div>
+      <img class="scene-bike" id="bike" src="/assets/bike.webp" alt="" />
+      <img class="hero-art" id="avatar" src="/assets/hero-base.webp" alt="Главный герой" />
     </section>
     <section class="headline"><div><span class="eyebrow">ТВОЙ ПУТЬ</span><h2 id="pathName">Начало истории</h2></div><div class="badge" id="reputation">Репутация 0</div></section>
     <section class="event-card"><span class="event-icon">✦</span><p id="event">Выбери действие, чтобы начать историю.</p></section>
