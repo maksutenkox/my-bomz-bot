@@ -6,6 +6,8 @@ const $ = (id) => document.getElementById(id);
 const icons = { Еда: "🍲", Здоровье: "✚", Радость: "✦", Работа: "⚒", Развитие: "📚", Магазин: "🛍", Жильё: "⌂", Финансы: "◈", Политика: "★", "Теневая сторона": "◆" };
 const colors = { food: "#eeb670", health: "#82bd98", joy: "#e9a5a7", energy: "#8eb5d5" };
 const names = { food: "Сытость", health: "Здоровье", joy: "Радость", energy: "Энергия" };
+const effectNames = { food: "еда", health: "здоровье", joy: "радость", energy: "энергия", money: "₽", reputation: "репутация", heat: "внимание", study: "учёба", investments: "инвестиции" };
+const effects = (action) => Object.entries(action.effects).filter(([key]) => key !== "workShifts").map(([key, value]) => key === "time" ? `${value} ч` : `${value > 0 ? "+" : ""}${value} ${effectNames[key] ?? key}`).join(" · ");
 let current = null;
 let activeTab = "Еда";
 let busy = false;
@@ -35,7 +37,7 @@ function render(data) {
   $("event").textContent = s.log[0];
   const tabs = [...new Set(data.actions.map((a) => a.tab))];
   $("tabs").innerHTML = tabs.map((tab) => `<button class="tab ${activeTab === tab ? "active" : ""}" data-tab="${tab}">${icons[tab]} ${tab}</button>`).join("");
-  $("actions").innerHTML = data.actions.filter((a) => a.tab === activeTab).map((a) => `<button class="action" data-action="${a.id}" ${a.unavailable || busy ? "disabled" : ""}><span class="action-icon">${icons[a.tab]}</span><span class="action-copy"><span class="action-title">${a.title}</span><span class="action-detail">${a.unavailable ?? a.detail}</span></span><span class="action-arrow">→</span></button>`).join("");
+  $("actions").innerHTML = data.actions.filter((a) => a.tab === activeTab).map((a) => `<button class="action" data-action="${a.id}" ${a.unavailable || busy ? "disabled" : ""}><span class="action-icon">${icons[a.tab]}</span><span class="action-copy"><span class="action-title">${a.title}</span><span class="action-detail">${a.unavailable ?? a.detail}</span><span class="action-effects">${effects(a)}</span></span><span class="action-arrow">→</span></button>`).join("");
 }
 
 $("tabs").addEventListener("click", (event) => {
@@ -47,9 +49,10 @@ $("actions").addEventListener("click", async (event) => {
   if (!id || busy) return;
   busy = true;
   render(current);
-  try { render(await api("/api/action", { method: "POST", body: JSON.stringify({ id }) })); tg?.HapticFeedback?.impactOccurred("light"); }
-  catch (error) { $("event").textContent = error.message; }
-  finally { busy = false; render(current); }
+  let failure = null;
+  try { current = await api("/api/action", { method: "POST", body: JSON.stringify({ id }) }); tg?.HapticFeedback?.impactOccurred("light"); }
+  catch (error) { failure = error.message; }
+  finally { busy = false; render(current); if (failure) $("event").textContent = failure; }
 });
 $("menuButton").onclick = () => $("info").showModal();
 $("closeInfo").onclick = () => $("info").close();
