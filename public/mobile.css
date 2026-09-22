@@ -68,3 +68,66 @@ dialog{background:#fffaf2;color:#243c35;border-color:#dadccd}
 .bottom-nav-item.active img{filter:saturate(1.1);transform:translateY(-1px) scale(1.08)}
 [hidden]{display:none!important}
 @media(max-width:360px){.shell{padding-left:11px;padding-right:11px}.scene{height:320px}.hero-art{height:92%}.meta{gap:6px}.tab{padding:7px 9px}.action-icon{width:48px;height:48px;flex-basis:48px}}
+
+
+/* Theme system */
+:root{color-scheme:light}
+:root[data-theme="dark"]{color-scheme:dark;background:#111817;color:#edf1e9}
+body,.status-card,.icon-button,.scene-label,.badge,.event-card,.housing-card,.housing-step,.tab,.action,dialog,.close,.bottom-nav,.bottom-nav-item,.track,.section-heading p,.action-detail,.action-lock,.action-effects,.housing-card p,.housing-card-header strong,.housing-card .housing-rent,.meta,.meta strong,footer,.reset{transition:background-color .2s ease,color .2s ease,border-color .2s ease,box-shadow .2s ease}
+.topbar-actions{display:flex;align-items:center;gap:7px}
+.theme-button{font-size:18px;line-height:1}
+.theme-button span{display:block;transform:translateY(-1px)}
+
+:root[data-theme="dark"] body{background:#111817;color:#edf1e9}
+:root[data-theme="dark"] .eyebrow{color:#d5a66f}
+:root[data-theme="dark"] .topbar h1{color:#f5f1e7}
+:root[data-theme="dark"] .topbar h1 span{color:#e1aa6d}
+:root[data-theme="dark"] .icon-button{background:#1b2725;color:#f2eadc;border-color:#334541;box-shadow:none}
+:root[data-theme="dark"] .icon-button:active{background:#263633}
+:root[data-theme="dark"] .status-card{background:#192421;color:#edf1e9;border-color:#2d3d39;box-shadow:0 6px 20px #00000024}
+:root[data-theme="dark"] .meta{color:#9fb0a8}
+:root[data-theme="dark"] .meta strong{color:#f0c27b}
+:root[data-theme="dark"] .bar-line{color:#dce6df}
+:root[data-theme="dark"] .bar-line span:last-child{color:#a9bab1}
+:root[data-theme="dark"] .track{background:#293532}
+:root[data-theme="dark"] .scene,
+:root[data-theme="dark"] .has-apartment.scene{box-shadow:0 14px 32px #00000052}
+:root[data-theme="dark"] .scene-vignette{background:linear-gradient(180deg,#07100f4d 0%,transparent 26%,transparent 61%,#050b0a8c 100%)}
+:root[data-theme="dark"] .scene-label{background:#15201edb;color:#edf1e9;border:1px solid #ffffff18;box-shadow:0 3px 12px #00000030}
+:root[data-theme="dark"] .headline h2{color:#f3f0e8}
+:root[data-theme="dark"] .badge{background:#24322e;color:#b9d8c2}
+:root[data-theme="dark"] .event-card{background:#202c28;color:#e8eee7;border-color:#30413b}
+:root[data-theme="dark"] .event-icon{color:#d2a46d}
+:root[data-theme="dark"] .housing-card{background:#18231f;border-color:#2e3e39;box-shadow:0 4px 16px #00000020}
+:root[data-theme="dark"] .housing-card-header strong{color:#ecf1ea}
+:root[data-theme="dark"] .housing-step{background:#252f2c;color:#84928c}
+:root[data-theme="dark"] .housing-step.reached{background:#2b4238;color:#bde2c7}
+:root[data-theme="dark"] .housing-card p{color:#a2b2aa}
+:root[data-theme="dark"] .housing-card .housing-rent{color:#abd1b7}
+:root[data-theme="dark"] .housing-card .housing-rent.warning{color:#e19a7d}
+:root[data-theme="dark"] .section-heading h2{color:#f3f0e8}
+:root[data-theme="dark"] .section-heading p{color:#94a59d}
+:root[data-theme="dark"] .tab{background:#1a2522;color:#abbab2;border-color:#31413c;box-shadow:none}
+:root[data-theme="dark"] .tab.active{background:#d7a76f;color:#19231f;border-color:#d7a76f}
+:root[data-theme="dark"] .action{background:#1a2522;color:#edf1e9;border-color:#2f3f3a;box-shadow:0 4px 14px #0000001f}
+:root[data-theme="dark"] .action:disabled{opacity:.62}
+:root[data-theme="dark"] .preview .action:disabled{opacity:.9}
+:root[data-theme="dark"] .action-icon{background:#26332f}
+:root[data-theme="dark"] .action-detail{color:#9eada6}
+:root[data-theme="dark"] .action-lock{color:#e09a7d}
+:root[data-theme="dark"] .action-effects{color:#d9aa72}
+:root[data-theme="dark"] .action-arrow{color:#e2ad73}
+:root[data-theme="dark"] footer{color:#788a82}
+:root[data-theme="dark"] .reset{color:#d7a76f}
+:root[data-theme="dark"] dialog{background:#18231f;color:#edf1e9;border-color:#34453f}
+:root[data-theme="dark"] dialog::backdrop{background:#030706cc}
+:root[data-theme="dark"] .close{background:#27332f;color:#eef1e9;border:0}
+:root[data-theme="dark"] .bottom-nav{background:#151f1df2;border-top-color:#2a3934;box-shadow:0 -6px 28px #00000042}
+:root[data-theme="dark"] .bottom-nav-item{color:#8fa097}
+:root[data-theme="dark"] .bottom-nav-item.active{background:#293a34;color:#d9e9df}
+:root[data-theme="dark"] .bottom-nav-item img{filter:saturate(.72) brightness(.9)}
+:root[data-theme="dark"] .bottom-nav-item.active img{filter:saturate(1.05) brightness(1.02);transform:translateY(-1px) scale(1.08)}
+
+@media (prefers-reduced-motion: reduce){
+  body,.status-card,.icon-button,.scene-label,.badge,.event-card,.housing-card,.housing-step,.tab,.action,dialog,.close,.bottom-nav,.bottom-nav-item,.track{transition:none}
+}
