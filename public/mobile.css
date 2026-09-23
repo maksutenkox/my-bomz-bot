@@ -75,8 +75,9 @@ dialog{background:#fffaf2;color:#243c35;border-color:#dadccd}
 :root[data-theme="dark"]{color-scheme:dark;background:#111817;color:#edf1e9}
 body,.status-card,.icon-button,.scene-label,.badge,.event-card,.housing-card,.housing-step,.tab,.action,dialog,.close,.bottom-nav,.bottom-nav-item,.track,.section-heading p,.action-detail,.action-lock,.action-effects,.housing-card p,.housing-card-header strong,.housing-card .housing-rent,.meta,.meta strong,footer,.reset{transition:background-color .2s ease,color .2s ease,border-color .2s ease,box-shadow .2s ease}
 .topbar-actions{display:flex;align-items:center;gap:7px}
-.theme-button{font-size:18px;line-height:1}
-.theme-button span{display:block;transform:translateY(-1px)}
+.theme-button{width:auto;min-width:78px;padding:0 10px;display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:15px;line-height:1;font-weight:800}
+.theme-button span{display:block;transform:none}
+.theme-button #themeLabel{font-size:10px;letter-spacing:.02em}
 
 :root[data-theme="dark"] body{background:#111817;color:#edf1e9}
 :root[data-theme="dark"] .eyebrow{color:#d5a66f}
@@ -130,4 +131,10 @@ body,.status-card,.icon-button,.scene-label,.badge,.event-card,.housing-card,.ho
 
 @media (prefers-reduced-motion: reduce){
   body,.status-card,.icon-button,.scene-label,.badge,.event-card,.housing-card,.housing-step,.tab,.action,dialog,.close,.bottom-nav,.bottom-nav-item,.track{transition:none}
+}
+
+@media(max-width:360px){
+  .topbar h1{font-size:21px}
+  .theme-button{min-width:66px;padding:0 8px;gap:4px}
+  .theme-button #themeLabel{font-size:9px}
 }
