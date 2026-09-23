@@ -1,7 +1,22 @@
 export const ACTIONS = [
   { id: "bins", tab: "Еда", title: "Проверить контейнеры", detail: "Еда и случайная находка", effects: { food: 14, health: -5, joy: -3, energy: -8, time: 3 }, event: "Ты нашёл съестное и пару полезных мелочей." },
-  { id: "canteen", tab: "Еда", title: "Социальная столовая", detail: "Бесплатный обед", effects: { food: 26, joy: 2, energy: -3, time: 4 }, event: "Горячий обед помог собраться с силами." },
+  { id: "canteen", tab: "Еда", title: "Социальная столовая", detail: "Бесплатный обед · раз в день", daily: true, effects: { food: 26, joy: 2, energy: -3, time: 4 }, event: "Горячий обед помог собраться с силами." },
+  { id: "social_breakfast", tab: "Еда", title: "Социальный завтрак", detail: "Скромно, но бесплатно · раз в день", daily: true, effects: { food: 14, joy: 1, energy: 2, time: 3 }, event: "Скромный завтрак помог начать день без пустого желудка." },
+  { id: "tea", tab: "Еда", title: "Горячий чай", detail: "Цена: 35 ₴ · немного согреться", cost: 35, effects: { food: 4, health: 2, joy: 3, energy: 4, time: 1 }, event: "Горячий чай помог согреться и немного прийти в себя." },
+  { id: "coffee", tab: "Еда", title: "Кофе на вынос", detail: "Цена: 55 ₴ · бодрит, но не насыщает", cost: 55, effects: { food: 2, joy: 4, energy: 8, time: 1 }, event: "Кофе взбодрил, и мир стал чуть легче переносить." },
+  { id: "bun", tab: "Еда", title: "Купить булочку", detail: "Цена: 30 ₴ · быстрый перекус", cost: 30, effects: { food: 8, joy: 2, time: 1 }, event: "Небольшой перекус помог не думать о голоде." },
+  { id: "apple", tab: "Еда", title: "Купить яблоко", detail: "Цена: 25 ₴ · дёшево и полезно", cost: 25, effects: { food: 6, health: 3, time: 1 }, event: "Простая еда, зато полезнее случайного фастфуда." },
+  { id: "banana", tab: "Еда", title: "Купить банан", detail: "Цена: 30 ₴ · быстрый источник сил", cost: 30, effects: { food: 7, health: 2, energy: 3, time: 1 }, event: "Банан быстро дал немного сил." },
+  { id: "hotdog", tab: "Еда", title: "Купить хот-дог", detail: "Цена: 85 ₴ · быстро и сытно", cost: 85, effects: { food: 17, joy: 4, health: -1, time: 1 }, event: "Не самая полезная еда, но голод отступил." },
+  { id: "instant_noodles", tab: "Еда", title: "Заварить лапшу", detail: "Цена: 60 ₴ · доступно и сытно", cost: 60, effects: { food: 14, joy: 2, energy: 2, time: 2 }, event: "Горячая лапша не праздник, но уже лучше пустого желудка." },
+  { id: "soup", tab: "Еда", title: "Взять суп дня", detail: "Цена: 95 ₴ · тёплая полезная еда", cost: 95, effects: { food: 18, health: 4, joy: 3, time: 2 }, event: "Тёплый суп заметно улучшил самочувствие." },
+  { id: "sandwich", tab: "Еда", title: "Купить бутерброд", detail: "Цена: 70 ₴ · перекус в дороге", cost: 70, effects: { food: 13, joy: 2, energy: 2, time: 1 }, event: "Бутерброд оказался простым, но вполне кстати." },
   { id: "shawarma", tab: "Еда", title: "Купить шаурму", detail: "Цена: 120 ₴", cost: 120, effects: { food: 24, health: -2, joy: 5, time: 1 }, event: "Вкусно, быстро и немного тяжеловато для желудка." },
+  { id: "burger", tab: "Еда", title: "Купить бургер", detail: "Цена: 140 ₴ · вкусно и сытно", cost: 140, effects: { food: 21, joy: 7, health: -2, time: 1 }, event: "Иногда вкусная еда нужна не только телу, но и настроению." },
+  { id: "pizza_slice", tab: "Еда", title: "Взять кусок пиццы", detail: "Цена: 110 ₴ · быстрая радость", cost: 110, effects: { food: 18, joy: 6, health: -1, time: 1 }, event: "Небольшая радость посреди тяжёлого дня." },
+  { id: "home_meal", tab: "Еда", title: "Домашний обед", detail: "Цена: 180 ₴ · простая хорошая еда", cost: 180, effects: { food: 24, health: 5, joy: 5, time: 2 }, event: "Нормальный обед напомнил, что жизнь может быть стабильной." },
+  { id: "business_lunch", tab: "Еда", title: "Взять бизнес-ланч", detail: "Цена: 260 ₴ · полноценный обед", cost: 260, effects: { food: 28, health: 6, joy: 8, energy: 3, time: 2 }, event: "Хорошая еда дала силы и ощущение нормального дня." },
+  { id: "festive_dinner", tab: "Еда", title: "Праздничный ужин", detail: "Цена: 480 ₴ · дорого, но приятно", cost: 480, effects: { food: 32, health: 7, joy: 14, energy: 4, time: 3 }, event: "На пару часов получилось почувствовать, что всё действительно может измениться." },
   { id: "restaurant", tab: "Еда", title: "Поесть в кафе", detail: "Цена: 550 ₴", cost: 550, effects: { food: 35, health: 4, joy: 12, time: 2 }, event: "Нормальная еда и час спокойствия." },
   { id: "herbs", tab: "Здоровье", title: "Найти лечебные травы", detail: "Небольшая помощь здоровью", effects: { health: 8, food: -4, energy: -5, time: 3 }, event: "Ты потратил время, но нашёл способ немного подлечиться." },
   { id: "clinic", tab: "Здоровье", title: "Посетить клинику", detail: "Цена: 350 ₴", cost: 350, requires: ["passport"], effects: { health: 28, joy: 2, time: 4 }, event: "Осмотр и лечение вернули силы." },
@@ -28,12 +43,13 @@ export const ACTIONS = [
 ];
 
 export function newGame(name = "Герой") {
-  return { name, day: 1, hour: 8, age: 25, food: 55, health: 75, joy: 55, energy: 65, money: 0, currencyVersion: 1, missedRent: 0, reputation: 0, heat: 0, study: 0, workShifts: 0, investments: 0, owned: [], log: ["День 1. Всё начинается с одного решения."], ended: false };
+  return { name, day: 1, hour: 8, age: 25, food: 55, health: 75, joy: 55, energy: 65, money: 0, currencyVersion: 1, missedRent: 0, reputation: 0, heat: 0, study: 0, workShifts: 0, investments: 0, owned: [], lastUsedDay: {}, log: ["День 1. Всё начинается с одного решения."], ended: false };
 }
 
 export function normalizeState(state) {
-  if (state.currencyVersion === 1) return state;
-  return { ...state, money: Math.max(0, Math.round((state.money ?? 0) * 10)), currencyVersion: 1, missedRent: state.missedRent ?? 0 };
+  if (state.currencyVersion === 1 && state.lastUsedDay) return state;
+  const money = state.currencyVersion === 1 ? Math.max(0, state.money ?? 0) : Math.max(0, Math.round((state.money ?? 0) * 10));
+  return { ...state, money, currencyVersion: 1, missedRent: state.missedRent ?? 0, lastUsedDay: state.lastUsedDay ?? {} };
 }
 
 export function housingTier(state) {
@@ -44,6 +60,7 @@ export function housingTier(state) {
 }
 
 function effectiveAction(action, state) {
+  if (action.id === "study") return { ...action, detail: `Учёба ${Math.min(state.study ?? 0, 3)}/3` };
   if (action.id !== "sleep") return action;
   const tier = housingTier(state);
   const bonus = { street: [0, 0], box: [5, 0], room: [10, 2], apartment: [15, 4] }[tier];
@@ -61,6 +78,7 @@ export function available(action, state) {
   if (action.id === "box" && housingTier(state) !== "street") return "Уже есть укрытие";
   if (action.id === "room" && housingTier(state) === "apartment") return "Уже есть квартира";
   if (action.once && state.owned.includes(action.gives)) return "Уже получено";
+  if (action.daily && state.lastUsedDay?.[action.id] === state.day) return "Доступно снова завтра";
   const missing = (action.requires ?? []).filter((item) => !state.owned.includes(item));
   const reasons = [];
   if (missing.length) reasons.push(`Нужно: ${missing.map(label).join(", ")}`);
@@ -87,6 +105,7 @@ export function play(state, id) {
     next[key] = (next[key] ?? 0) + delta;
   }
   if (action.gives) next.owned.push(action.gives);
+  if (action.daily) next.lastUsedDay[action.id] = next.day;
   if (action.id === "room" || action.id === "apartment") next.missedRent = 0;
   if (action.id === "apartment") next.owned = next.owned.filter((item) => item !== "room");
   next.log.unshift(action.event);
