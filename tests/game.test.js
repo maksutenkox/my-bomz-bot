@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { existsSync } from "node:fs";
 import { ACTIONS, actionsFor, available, housingTier, newGame, normalizeState, play } from "../src/game.js";
 
 const action = (id) => ACTIONS.find((item) => item.id === id);
@@ -58,4 +59,27 @@ test("locked actions explain every missing requirement", () => {
   assert.match(reason, /паспорт/);
   assert.match(reason, /1200 ₴/);
   assert.match(reason, /0\/4/);
+});
+
+
+test("new food pack is wired to illustrated assets", () => {
+  const ids = ["tea", "coffee", "bun", "apple", "banana", "hotdog", "instant_noodles", "soup", "sandwich", "social_breakfast", "home_meal", "burger", "pizza_slice", "business_lunch", "festive_dinner"];
+  for (const id of ids) {
+    assert.ok(action(id), `missing action ${id}`);
+    assert.ok(existsSync(new URL(`../public/assets/${id}.webp`, import.meta.url)), `missing asset ${id}`);
+  }
+});
+
+test("social meals can only be used once per game day", () => {
+  let state = newGame();
+  state = play(state, "social_breakfast");
+  assert.match(available(action("social_breakfast"), state), /завтра/);
+  assert.equal(available(action("canteen"), state), null);
+  state = play(state, "canteen");
+  assert.match(available(action("canteen"), state), /завтра/);
+});
+
+test("study progress text reflects the current state", () => {
+  const state = { ...newGame(), study: 2 };
+  assert.equal(actionsFor(state).find((item) => item.id === "study").detail, "Учёба 2/3");
 });
