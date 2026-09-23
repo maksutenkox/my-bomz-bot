@@ -83,3 +83,18 @@ test("study progress text reflects the current state", () => {
   const state = { ...newGame(), study: 2 };
   assert.equal(actionsFor(state).find((item) => item.id === "study").detail, "Учёба 2/3");
 });
+
+
+test("expanded job ladder is present and gated progressively", () => {
+  const ids = ["flyers","loader","cleaner","dishwasher","courier_walk","warehouse_shift","courier_bike","barista","seller","mechanic_helper","support_operator"];
+  for (const id of ids) assert.ok(action(id), `missing job ${id}`);
+  assert.equal(available(action("flyers"), newGame()), null);
+  assert.match(available(action("cleaner"), newGame()), /паспорт/);
+  assert.match(available(action("courier_bike"), { ...newGame(), money: 5000, workShifts: 5, owned: ["passport"] }), /велосипед/);
+});
+
+test("room-tier jobs remain available after upgrading to an apartment", () => {
+  const state = { ...newGame(), money: 5000, workShifts: 10, study: 3, owned: ["passport", "diploma", "box", "apartment"] };
+  assert.equal(available(action("guard"), state), null);
+  assert.equal(available(action("support_operator"), state), null);
+});
