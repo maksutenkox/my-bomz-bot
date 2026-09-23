@@ -39,6 +39,7 @@ function applyTheme(theme, persist = false) {
   const dark = next === "dark";
   const button = $("themeButton");
   const icon = $("themeIcon");
+  const themeLabel = $("themeLabel");
   const label = dark ? "Включить светлую тему" : "Включить тёмную тему";
   if (button) {
     button.setAttribute("aria-label", label);
@@ -46,6 +47,7 @@ function applyTheme(theme, persist = false) {
     button.setAttribute("aria-pressed", String(dark));
   }
   if (icon) icon.textContent = dark ? "☀" : "☾";
+  if (themeLabel) themeLabel.textContent = "Тема";
   $("themeColor")?.setAttribute("content", dark ? "#111817" : "#f4f1e9");
   try {
     tg?.setHeaderColor?.(dark ? "#111817" : "#f4f1e9");
