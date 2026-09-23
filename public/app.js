@@ -105,7 +105,7 @@ function render(data) {
   $("bottomNav").innerHTML = Object.entries(sections).map(([key, section]) => `<button class="bottom-nav-item ${activeSection === key ? "active" : ""}" data-section="${key}" aria-current="${activeSection === key ? "page" : "false"}"><img src="/assets/${section.icon}.webp" alt="" /><span>${section.label}</span></button>`).join("");
   $("homePanel").hidden = activeSection !== "home";
   $("actionPanel").hidden = activeSection === "home";
-  const actionCard = (a) => `<button class="action" data-action="${a.id}" ${a.unavailable || busy || preview ? "disabled" : ""}><span class="action-icon"><img src="/assets/${a.id}.webp" alt="" loading="lazy" /></span><span class="action-copy"><span class="action-title">${a.title}</span><span class="action-detail">${a.detail}</span>${a.unavailable ? `<span class="action-lock">${a.unavailable}</span>` : ""}<span class="action-effects">${effects(a)}</span></span><span class="action-arrow">→</span></button>`;
+  const actionCard = (a) => `<button class="action" data-action="${a.id}" ${a.unavailable || busy || preview ? "disabled" : ""}><span class="action-icon"><img src="/assets/${a.art ?? a.id}.webp" alt="" loading="lazy" /></span><span class="action-copy"><span class="action-title">${a.title}</span><span class="action-detail">${a.detail}</span>${a.unavailable ? `<span class="action-lock">${a.unavailable}</span>` : ""}<span class="action-effects">${effects(a)}</span></span><span class="action-arrow">→</span></button>`;
   $("homeActions").innerHTML = ["canteen", "bottles", "sleep"].map((id) => data.actions.find((a) => a.id === id)).filter(Boolean).map(actionCard).join("");
   if (activeSection !== "home") {
     const section = sections[activeSection];

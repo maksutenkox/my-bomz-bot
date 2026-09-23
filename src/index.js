@@ -79,7 +79,7 @@ export default {
       if (url.pathname === "/" || url.pathname === "/index.html") {
         const headers = new Headers(asset.headers);
         headers.set("Cache-Control", "no-cache, no-store, must-revalidate");
-        headers.set("X-Game-Version", "0.5.0");
+        headers.set("X-Game-Version", "0.6.0");
         return new Response(asset.body, { status: asset.status, statusText: asset.statusText, headers });
       }
       return asset;
